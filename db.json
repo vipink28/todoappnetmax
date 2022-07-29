@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "username": "user",
+      "email": "user@gmail.com",
+      "password": "abc@123",
+      "role": "user",
+      "id": 1
+    },
+    {
+      "username": "vipin",
+      "email": "vipink28@gmail.com",
+      "password": "standalone@1",
+      "role": "user",
+      "id": 2
+    }
+  ],
+  "tasks": [
+    {
+      "title": "Meeting",
+      "description": "lorem ipsumn",
+      "datetime": "2022-07-20T23:02",
+      "userId": 1,
+      "dateCreated": "2022-07-14T13:27:17.145Z",
+      "id": 1
+    },
+    {
+      "title": "Meeting",
+      "description": "My Meeting",
+      "datetime": "2022-07-16T18:07",
+      "userId": 2,
+      "dateCreated": "2022-07-27T08:33:03.166Z",
+      "id": 2
+    }
+  ]
+}
