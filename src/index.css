@@ -106,3 +106,10 @@ body{
 .table tbody tr td:nth-last-child(2){
     min-width: 190px;
 }
+
+.modal-dialog{
+    max-width: 581px;
+}
+.modal-dialog .close{
+    cursor: pointer;
+}

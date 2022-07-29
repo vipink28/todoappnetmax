@@ -1,42 +1,122 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import TodoContext from "../context/TodoContext";
+import {dateFormat} from "../utils/index";
 
 function Modal(props) {
-  const content = props.contentType;
+  const content = props.content;
+  const [formData, setFormData] = useState({
+      title: "",
+      description: "",
+      datetime: ""
+  });
   const element = useRef(null);
-  const { onDeleteTask, message } = useContext(TodoContext);
+  const { onDeleteTask, message, updateTask } = useContext(TodoContext);
   
-  const delTask = () => {
-    onDeleteTask(props.delId.id).then(() => {
+  const delTask = () => {    
+    onDeleteTask(content.task.id).then(() => {
       element.current.click();
-      props.setDeleteId((prev) => ({
-        ...prev,
-        isDeleted: true,
-      }));
     });
+  };
+
+  let datentime = new Date();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+      dateCreated: datentime
+    }));
+  };
+
+  const onUpdateTask = (e) => {
+    e.preventDefault();
+    updateTask(formData, content.task.id);
   };
 
 
   return (
     <div className="modal fade" id="popup" tabIndex="-1" aria-hidden="true">
-      <div className="modal-dialog vertically-centered">
+      <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content bg-primary">
           <div className="modal-header py-2 border-bottom-0">
             <span
-              className="ms-auto text-white"
+              className="ms-auto text-white close"
               data-bs-dismiss="modal"
               aria-label="Close"
             >
-              <i className="fa-solid fa-xmark"></i>
+              <i className="fa-solid fa-xmark fs-4"></i>
             </span>
           </div>
           <div className="modal-body text-white">
-            {content === "viewtask" ? (
-              <div></div>
-            ) : content === "edittask" ? (
-              <div className="pb-4">
+          
+            {content.modelValue === "viewtask" ? ( 
 
+              <div className="card bg-primary text-white pt-4 px-3 pb-2">                    
+                    <div className="card-body">
+                      <h4>{content.task.title}</h4>
+                      <p>{content.task.description}</p>
+                    </div>
+                    <div className="card-footer bg-transparent d-flex flex-sm-row flex-column">
+                      <p className="text-secondary">Created: {dateFormat(content.task.dateCreated)} </p>
+                      <p className="ms-sm-auto text-secondary">
+                        Due: {dateFormat(content.task.datetime)}
+                      </p>
+                    </div>          
               </div>
+
+            ) : content.modelValue === "edittask" ? (
+
+              <div className="pb-4">
+              <form className="task" id="task-form">
+                    <div className="mb-4">
+                      <label className="form-label" htmlFor="title">
+                        Title
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        name="title"
+                        id="title"
+                        value={formData.title}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="form-label" htmlFor="description">
+                        Description
+                      </label>
+                      <textarea
+                        className="form-control"
+                        name="description"
+                        id="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                      ></textarea>
+                    </div>
+                    <div className="mb-4">
+                      <label className="form-label" htmlFor="datetime">
+                        datetime
+                      </label>
+                      <input
+                        className="form-control"
+                        type="datetime-local"
+                        name="datetime"
+                        id="datetime"
+                        value={formData.datetime}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <p>{message}</p>
+                  
+                      <button
+                        className="btn bg-info text-black px-5 py-2 mb-2"
+                        onClick={onUpdateTask}
+                      >
+                        Update Task
+                      </button>              
+                  </form>
+              </div>
+
             ) : (
               <div className="pb-4">
                 {message === "" ? (
