@@ -3,18 +3,31 @@ import TodoContext from "../context/TodoContext";
 import {dateFormat} from "../utils/index";
 
 function Modal(props) {
+  const init = {
+    title: "",
+    description: "",
+    datetime: ""
+  }
   const content = props.content;
-  const [formData, setFormData] = useState({
-      title: "",
-      description: "",
-      datetime: ""
-  });
+  const task = props.content.task;
+  const [formData, setFormData] = useState(init);  
   const element = useRef(null);
   const { onDeleteTask, message, updateTask } = useContext(TodoContext);
   
-  const delTask = () => {    
-    onDeleteTask(content.task.id).then(() => {
-      element.current.click();
+  useEffect(()=>{
+    if(task){
+      setFormData(task);
+    }
+  }, [task])
+
+
+  const delTask = (e) => {
+    onDeleteTask(content.task.id).then(()=>{
+       var popup = e.target.closest('#popup');
+       setTimeout(()=>{
+        popup.style.display = "none";
+        document.querySelector(".modal-backdrop").style.display = "none";
+    }, 3000);
     });
   };
 
@@ -30,7 +43,14 @@ function Modal(props) {
 
   const onUpdateTask = (e) => {
     e.preventDefault();
-    updateTask(formData, content.task.id);
+    console.log(element.current);
+    updateTask(formData, content.task.id).then(()=>{
+      var popup = e.target.closest('#popup');
+      setTimeout(()=>{
+       popup.style.display = "none";
+       document.querySelector(".modal-backdrop").style.display = "none";
+   }, 3000);
+    });
   };
 
 
@@ -61,7 +81,7 @@ function Modal(props) {
                       <p className="ms-sm-auto text-secondary">
                         Due: {dateFormat(content.task.datetime)}
                       </p>
-                    </div>          
+                    </div>
               </div>
 
             ) : content.modelValue === "edittask" ? (

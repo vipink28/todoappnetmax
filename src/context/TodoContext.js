@@ -160,7 +160,7 @@ export const TodoProvider = ({children})=>{
                 setMessage("Task Updated Successfully");
                 setTimeout(()=>{
                     setMessage("");
-                }, 5000)
+                }, 3000)
             }
             else{
                 throw Error ("Please reload the app");
@@ -181,7 +181,7 @@ export const TodoProvider = ({children})=>{
             setMessage("Deleted Successfully");
             setTimeout(()=>{
                 setMessage("");
-            }, 5000)
+            }, 3000)
         }
         catch(err){
           console.log(err.message);
